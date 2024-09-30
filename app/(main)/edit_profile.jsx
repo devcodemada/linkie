@@ -18,7 +18,7 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import { theme } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 import { hp, wp } from "../../helpers/common";
-import { getUserImageSrc } from "../../services/imageService";
+import { getUserImageSrc, uploadFile } from "../../services/imageService";
 import { updateUser } from "../../services/userService";
 
 const EditProfile = () => {
@@ -61,7 +61,12 @@ const EditProfile = () => {
         setLoading(true);
 
         if (typeof image == "object") {
-            // upload
+            let imageRes = await uploadFile("profiles", image?.uri, true);
+            if (imageRes?.success) {
+                userData.image = imageRes.data;
+            } else {
+                userData.image = null;
+            }
         }
 
         const res = await updateUser(currentUser?.id, userData);
