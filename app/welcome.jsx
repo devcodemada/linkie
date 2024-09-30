@@ -28,7 +28,7 @@ const Welcome = () => {
 
                 {/* title */}
                 <View style={{ gap: 20 }}>
-                    <Text style={styles.title}>Linkie!</Text>
+                    <Text style={styles.title}>Linkie</Text>
                     <Text style={styles.punchLine}>
                         Where every thought finds a home and every image tells a
                         story!

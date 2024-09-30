@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { Pressable, StatusBar, StyleSheet, Text, View } from "react-native";
 
 import Icon from "../assets/icons";
 import BackButton from "../components/BackButton";
@@ -9,7 +9,9 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import { theme } from "../constants/theme";
 import { hp, wp } from "../helpers/common";
 
+import { Alert } from "react-native";
 import Button from "../components/Button";
+import { supabase } from "../lib/supabase";
 
 const Login = () => {
     const router = useRouter();
@@ -17,11 +19,29 @@ const Login = () => {
     const passwordRef = useRef("");
     const [loading, setLoading] = useState(false);
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        if (!emailRef.current || !passwordRef.current) {
+            Alert.alert("Login", "please fill all the fields!");
+            return;
+        }
+
+        let email = emailRef.current.trim();
+        let password = passwordRef.current.trim();
+
         setLoading(true);
-        setTimeout(() => {
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) {
             setLoading(false);
-        }, 2000);
+            Alert.alert("Login", error.message);
+            return;
+        }
+
+        setLoading(false);
     };
 
     return (
@@ -65,6 +85,26 @@ const Login = () => {
                         onPress={onSubmit}
                         loading={loading}
                     />
+                </View>
+
+                {/* footer */}
+                <View style={styles.footer}>
+                    <Text style={styles.footerText}>
+                        Don't have an account?
+                    </Text>
+                    <Pressable onPress={() => router.push("/signup")}>
+                        <Text
+                            style={[
+                                styles.footerText,
+                                {
+                                    color: theme.colors.primaryDark,
+                                    fontWeight: theme.fonts.semiBold,
+                                },
+                            ]}
+                        >
+                            Sign up
+                        </Text>
+                    </Pressable>
                 </View>
             </View>
         </ScreenWrapper>
