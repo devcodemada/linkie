@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -42,19 +43,26 @@ const EditProfile = () => {
         }
     }, [currentUser]);
 
-    let imageSource = getUserImageSrc(user?.image);
+    let imageSource =
+        user?.image && typeof user?.image === "object"
+            ? user.image.uri
+            : getUserImageSrc(user?.image);
 
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const onSubmit = async () => {
         let userData = { ...user };
-        let { name, phoneNumber, address, bio } = userData;
-        if (!name || !phoneNumber || !address || !bio) {
+        let { name, phoneNumber, address, bio, image } = userData;
+        if (!name || !phoneNumber || !address || !bio || !image) {
             Alert.alert("Edit Profile", "Please fill all the fields");
             return;
         }
         setLoading(true);
+
+        if (typeof image == "object") {
+            // upload
+        }
 
         const res = await updateUser(currentUser?.id, userData);
         setLoading(false);
@@ -65,7 +73,18 @@ const EditProfile = () => {
         }
     };
 
-    const onPickImage = () => {};
+    const onPickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 0.7,
+        });
+
+        if (!result.canceled) {
+            setUser({ ...user, image: result.assets[0] });
+        }
+    };
     return (
         <ScreenWrapper bg={"white"}>
             <View style={styles.container}>
