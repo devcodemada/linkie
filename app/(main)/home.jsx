@@ -1,16 +1,69 @@
 import { useRouter } from "expo-router";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from "../../assets/icons";
 import Avatar from "../../components/Avatar";
+import Loading from "../../components/Loading";
+import PostCard from "../../components/PostCard";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { theme } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 import { hp, wp } from "../../helpers/common";
+import { supabase } from "../../lib/supabase";
+import { fetchPosts } from "../../services/postService";
+import { getUserData } from "../../services/userService";
 
+var limit = 0;
 const Home = () => {
     const { user } = useAuth();
     const router = useRouter();
+
+    const [post, setPost] = useState([]);
+
+    const handlePostEvent = async (payload) => {
+        if (payload.eventType === "INSERT" && payload?.new?.id) {
+            let newPost = { ...payload.new };
+            let res = await getUserData(newPost.user_id);
+
+            newPost.user = res.success ? res.data : {};
+            setPost((prev) => [newPost, ...prev]);
+        }
+    };
+
+    useEffect(() => {
+        let postChannel = supabase
+            .channel("posts")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "posts",
+                },
+                handlePostEvent
+            )
+            .subscribe();
+
+        getPosts();
+
+        return () => {
+            supabase.removeChannel(postChannel);
+        };
+    }, []);
+
+    const getPosts = async () => {
+        limit = limit + 10;
+
+        console.log("limit : ", limit);
+        let response = await fetchPosts(limit);
+
+        if (response.success) {
+            setPost(response.data);
+        }
+
+        console.log("got posts result : ", response);
+    };
+
     return (
         <ScreenWrapper bg={"white"}>
             <View style={StyleSheet.container}>
@@ -46,6 +99,23 @@ const Home = () => {
                     </View>
                 </View>
             </View>
+
+            <FlatList
+                data={post}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.listStyle}
+                key={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <PostCard item={item} currentUser={user} router={router} />
+                )}
+                ListFooterComponent={
+                    <View
+                        style={{ marginVertical: post.length == 0 ? 200 : 30 }}
+                    >
+                        <Loading />
+                    </View>
+                }
+            />
         </ScreenWrapper>
     );
 };

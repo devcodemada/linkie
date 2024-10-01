@@ -1,9 +1,15 @@
 import { router, Stack } from "expo-router";
 import React, { useEffect } from "react";
+import { LogBox } from "react-native";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getUserData } from "../services/userService";
 
+LogBox.ignoreLogs([
+    "Warning: TNodeChildrenRenderer",
+    "Warning: MemoizedTNodeRenderer",
+    "Warning: TRenderEngineProvider",
+]);
 export default _layout = () => {
     return (
         <AuthProvider>
