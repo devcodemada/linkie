@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderWidth: 0.4,
+        borderBottomWidth: 0.8,
         borderColor: theme.colors.text,
         borderRadius: theme.radius.xxl,
         borderCurve: "continuous",

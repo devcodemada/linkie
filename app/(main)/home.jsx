@@ -19,6 +19,7 @@ const Home = () => {
     const router = useRouter();
 
     const [post, setPost] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
 
     const handlePostEvent = async (payload) => {
         if (payload.eventType === "INSERT" && payload?.new?.id) {
@@ -44,7 +45,7 @@ const Home = () => {
             )
             .subscribe();
 
-        getPosts();
+        // getPosts();
 
         return () => {
             supabase.removeChannel(postChannel);
@@ -52,16 +53,15 @@ const Home = () => {
     }, []);
 
     const getPosts = async () => {
+        if (hasMore == false) return null;
         limit = limit + 10;
 
-        console.log("limit : ", limit);
         let response = await fetchPosts(limit);
 
         if (response.success) {
+            if (post.length == response.data.length) setHasMore(false);
             setPost(response.data);
         }
-
-        console.log("got posts result : ", response);
     };
 
     return (
@@ -109,12 +109,25 @@ const Home = () => {
                     <PostCard item={item} currentUser={user} router={router} />
                 )}
                 ListFooterComponent={
-                    <View
-                        style={{ marginVertical: post.length == 0 ? 200 : 30 }}
-                    >
-                        <Loading />
-                    </View>
+                    hasMore ? (
+                        <View
+                            style={{
+                                marginVertical: post.length == 0 ? 200 : 30,
+                            }}
+                        >
+                            <Loading />
+                        </View>
+                    ) : (
+                        <View style={{ marginVertical: 30 }}>
+                            <Text style={styles.noPost}>No more posts</Text>
+                        </View>
+                    )
                 }
+                onEndReached={() => {
+                    getPosts();
+                    console.log(`end reached : ${limit}`);
+                }}
+                onEndReachedThreshold={0}
             />
         </ScreenWrapper>
     );

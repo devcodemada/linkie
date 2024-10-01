@@ -39,5 +39,14 @@ const MainLayout = () => {
             setUserData(res.data);
         }
     };
-    return <Stack screenOptions={{ headerShown: false }} />;
+    return (
+        <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="(main)/post_details"
+                options={{
+                    presentation: "modal",
+                }}
+            />
+        </Stack>
+    );
 };
