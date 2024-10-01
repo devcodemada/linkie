@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    Alert,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 
 import Avatar from "../../components/Avatar";
 import Header from "../../components/Header";
@@ -18,6 +25,7 @@ import { Video } from "expo-av";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { getSupabaseFileUrl } from "../../services/imageService";
+import { createOrUpdatePost } from "../../services/postService";
 
 const newPost = () => {
     const { user } = useAuth();
@@ -59,7 +67,7 @@ const newPost = () => {
             return file.type;
         }
 
-        if (file.includes("postImage")) return "image";
+        if (file.includes("postImages")) return "image";
 
         return "video";
     };
@@ -74,8 +82,29 @@ const newPost = () => {
     };
 
     const onSubmit = async () => {
-        console.log("body: ", bodyRef.current);
-        console.log("file: ", file);
+        if (!bodyRef.current && !file) {
+            Alert.alert("Post", "Please choose an image or add post body");
+            return;
+        }
+
+        let data = {
+            file,
+            body: bodyRef.current,
+            user_id: user?.id,
+        };
+
+        setLoading(true);
+        const result = await createOrUpdatePost(data);
+        setLoading(false);
+
+        if (result?.success) {
+            setFile(null);
+            bodyRef.current = "";
+            editorRef.current?.setContentHTML("");
+            router.back();
+        } else {
+            Alert.alert("Post", result?.msg);
+        }
     };
 
     return (
