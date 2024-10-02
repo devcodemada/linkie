@@ -6,12 +6,17 @@ import { theme } from "../constants/theme";
 import { hp } from "../helpers/common";
 import Avatar from "./Avatar";
 
-const CommentItem = ({ item, canDelete = false, onDeleteComment }) => {
+const CommentItem = ({
+    item,
+    canDelete = false,
+    onDeleteComment,
+    highlight = false,
+}) => {
     const createdAt = moment(item?.created_at).format("MMM d, YYYY");
     return (
         <View style={styles.container}>
             <Avatar uri={item.user?.image} />
-            <View style={styles.content}>
+            <View style={[styles.content, highlight && styles.highlight]}>
                 <View
                     style={{
                         flexDirection: "row",
@@ -70,7 +75,7 @@ const styles = StyleSheet.create({
     highlight: {
         borderWidth: 0.2,
         backgroundColor: "white",
-        borderColor: theme.colors.dark,
+        borderColor: theme.colors.darkLight,
         shadowColor: theme.colors.dark,
         shadowOffset: {
             width: 0,

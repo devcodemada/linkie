@@ -47,33 +47,62 @@ export const createOrUpdatePost = async (post) => {
     }
 };
 
-export const fetchPosts = async (limit = 10) => {
+export const fetchPosts = async (limit = 10, userId) => {
     try {
-        const { data, error } = await supabase
-            .from("posts")
-            .select(
-                `
+        if (userId) {
+            const { data, error } = await supabase
+                .from("posts")
+                .select(
+                    `
                     *, 
                     user: users (id, name, image),
                     post_likes (*),
                     comments (count)
                 `
-            )
-            .order("created_at", { ascending: false })
-            .limit(limit);
+                )
+                .order("created_at", { ascending: false })
+                .eq("user_id", userId)
+                .limit(limit);
 
-        if (error) {
-            console.log("fetch post error : ", error);
+            if (error) {
+                console.log("fetch post error : ", error);
+                return {
+                    success: false,
+                    msg: `Couldn't fetch the posts`,
+                };
+            }
+
             return {
-                success: false,
-                msg: `Couldn't fetch the posts`,
+                success: true,
+                data,
+            };
+        } else {
+            const { data, error } = await supabase
+                .from("posts")
+                .select(
+                    `
+                    *, 
+                    user: users (id, name, image),
+                    post_likes (*),
+                    comments (count)
+                `
+                )
+                .order("created_at", { ascending: false })
+                .limit(limit);
+
+            if (error) {
+                console.log("fetch post error : ", error);
+                return {
+                    success: false,
+                    msg: `Couldn't fetch the posts`,
+                };
+            }
+
+            return {
+                success: true,
+                data,
             };
         }
-
-        return {
-            success: true,
-            data,
-        };
     } catch (error) {
         console.log("fetch post error : ", error);
         return {
@@ -253,6 +282,69 @@ export const removePost = async (postId) => {
         return {
             success: false,
             msg: `Couldn't delete the post`,
+        };
+    }
+};
+
+export const createNotification = async (notification) => {
+    try {
+        const { data, error } = await supabase
+            .from("notifications")
+            .insert(notification)
+            .select()
+            .single();
+
+        if (error) {
+            console.log("Notification error : ", error);
+            return {
+                success: false,
+                msg: `Couldn't create the Notification`,
+            };
+        }
+
+        return {
+            success: true,
+            data,
+        };
+    } catch (error) {
+        console.log("Notification error : ", error);
+        return {
+            success: false,
+            msg: `Couldn't create the Notification`,
+        };
+    }
+};
+
+export const fetchNotifications = async (receiverId) => {
+    try {
+        const { data, error } = await supabase
+            .from("notifications")
+            .select(
+                `
+                    *,
+                    sender: sender_id(id, name, image)
+                `
+            )
+            .eq("receiver_id", receiverId)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.log("Fetch notification error : ", error);
+            return {
+                success: false,
+                msg: `Couldn't fetch the notification`,
+            };
+        }
+
+        return {
+            success: true,
+            data,
+        };
+    } catch (error) {
+        console.log("Fetch notification error : ", error);
+        return {
+            success: false,
+            msg: `Couldn't fetch the notification`,
         };
     }
 };

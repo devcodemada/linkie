@@ -19,6 +19,7 @@ import { hp, wp } from "../../helpers/common";
 import { supabase } from "../../lib/supabase";
 import {
     createComment,
+    createNotification,
     fetchPostDetails,
     removeComment,
     removePost,
@@ -26,7 +27,7 @@ import {
 import { getUserData } from "../../services/userService";
 
 const PostDetails = () => {
-    const { postId } = useLocalSearchParams();
+    const { postId, commentId } = useLocalSearchParams();
     const { user } = useAuth();
     const router = useRouter();
     const [startLoading, setStartLoading] = useState(true);
@@ -97,6 +98,19 @@ const PostDetails = () => {
         setLoading(false);
 
         if (res?.success) {
+            if (user.id != post.user_id) {
+                let notify = {
+                    sender_id: user.id,
+                    receiver_id: post.user_id,
+                    title: "Commented on your post",
+                    data: JSON.stringify({
+                        post_id: post.id,
+                        comment_id: res?.data?.id,
+                    }),
+                };
+
+                createNotification(notify);
+            }
             inputRef.current?.clear();
             commentRef.current = "";
         } else {
@@ -220,6 +234,7 @@ const PostDetails = () => {
                                 user.id == post.user_id
                             }
                             onDeleteComment={() => onDeleteComment(comment)}
+                            highlight={comment.id == commentId}
                         />
                     ))}
 
