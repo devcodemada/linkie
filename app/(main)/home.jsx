@@ -1,6 +1,13 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+    FlatList,
+    Pressable,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import Icon from "../../assets/icons";
 import Avatar from "../../components/Avatar";
 import Loading from "../../components/Loading";
@@ -22,12 +29,38 @@ const Home = () => {
     const [hasMore, setHasMore] = useState(true);
 
     const handlePostEvent = async (payload) => {
-        if (payload.eventType === "INSERT" && payload?.new?.id) {
+        if (payload.eventType == "INSERT" && payload?.new?.id) {
             let newPost = { ...payload.new };
+
             let res = await getUserData(newPost.user_id);
 
-            newPost.user = res.success ? res.data : {};
-            setPost((prev) => [newPost, ...prev]);
+            newPost.user = res?.success ? res.data : {};
+            newPost.comments = [{ count: 0 }];
+            newPost.post_likes = [];
+
+            setPost((prev) => {
+                return [newPost, ...prev];
+            });
+        }
+
+        if (payload.eventType == "DELETE" && payload?.old?.id) {
+            setPost((prev) => {
+                let updatedPost = prev.filter((p) => p.id != payload?.old?.id);
+                return updatedPost;
+            });
+        }
+
+        if (payload.eventType == "UPDATE" && payload?.new?.id) {
+            setPost((prev) => {
+                let updatedPost = prev.map((p) => {
+                    if (p.id == payload?.new?.id) {
+                        p.body = payload?.new?.body;
+                        p.file = payload?.new?.file;
+                    }
+                    return p;
+                });
+                return updatedPost;
+            });
         }
     };
 
@@ -62,6 +95,14 @@ const Home = () => {
             if (post.length == response.data.length) setHasMore(false);
             setPost(response.data);
         }
+    };
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await getPosts();
+        setRefreshing(false);
     };
 
     return (
@@ -105,9 +146,21 @@ const Home = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.listStyle}
                 key={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <PostCard item={item} currentUser={user} router={router} />
-                )}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+                renderItem={({ item }) => {
+                    return (
+                        <PostCard
+                            item={item}
+                            currentUser={user}
+                            router={router}
+                        />
+                    );
+                }}
                 ListFooterComponent={
                     hasMore ? (
                         <View
@@ -125,7 +178,6 @@ const Home = () => {
                 }
                 onEndReached={() => {
                     getPosts();
-                    console.log(`end reached : ${limit}`);
                 }}
                 onEndReachedThreshold={0}
             />

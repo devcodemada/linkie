@@ -21,6 +21,7 @@ import {
     createComment,
     fetchPostDetails,
     removeComment,
+    removePost,
 } from "../../services/postService";
 import { getUserData } from "../../services/userService";
 
@@ -34,12 +35,7 @@ const PostDetails = () => {
     const inputRef = useRef(null);
     const commentRef = useRef("");
 
-    useEffect(() => {
-        getPostDetails();
-    }, []);
-
     const handleNewComment = async (payload) => {
-        console.log(payload.new);
         if (payload.new) {
             let newComment = { ...payload.new };
             let res = await getUserData(newComment.user_id);
@@ -66,7 +62,7 @@ const PostDetails = () => {
             )
             .subscribe();
 
-        // getPostDetails();
+        getPostDetails();
 
         return () => {
             supabase.removeChannel(commentChannel);
@@ -146,6 +142,24 @@ const PostDetails = () => {
             Alert.alert("Comment", res?.msg);
         }
     };
+
+    const onEditPost = async (item) => {
+        router.push({
+            pathname: "/new_post",
+            params: {
+                ...item,
+            },
+        });
+    };
+    const onDeletePost = async () => {
+        let res = await removePost(post.id);
+        if (res?.success) {
+            router.back();
+        } else {
+            Alert.alert("Post", res?.msg);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -161,6 +175,9 @@ const PostDetails = () => {
                     router={router}
                     hasShadow={false}
                     showMoreIcon={false}
+                    showDelete={true}
+                    onDelete={onDeletePost}
+                    onEdit={onEditPost}
                 />
 
                 {/* Comment input */}

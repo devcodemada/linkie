@@ -40,11 +40,14 @@ const MainLayout = () => {
         }
     };
     return (
-        <Stack screenOptions={{ headerShown: false }}>
+        <Stack screenOptions={{ headerShown: false, animation: "fade" }}>
             <Stack.Screen
                 name="(main)/post_details"
                 options={{
                     presentation: "modal",
+                    headerRight: () => {
+                        return null;
+                    },
                 }}
             />
         </Stack>

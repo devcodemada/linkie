@@ -42,6 +42,9 @@ const PostCard = ({
     router,
     hasShadow = true,
     showMoreIcon = true,
+    showDelete = false,
+    onDelete = () => {},
+    onEdit = () => {},
 }) => {
     const shadowStyles = {
         shadowOffset: {
@@ -73,14 +76,14 @@ const PostCard = ({
         setLikes(item?.post_likes);
     }, []);
 
-    const liked = likes.filter((like) => like?.user_id === currentUser?.id)[0]
+    const liked = likes?.filter((like) => like?.user_id === currentUser?.id)[0]
         ? true
         : false;
 
     const onLike = async () => {
         if (liked) {
-            let updatedLikes = likes.filter(
-                (like) => like.user_id != currentUser?.id
+            let updatedLikes = likes?.filter(
+                (like) => like?.user_id != currentUser?.id
             );
 
             setLikes([...updatedLikes]);
@@ -121,6 +124,23 @@ const PostCard = ({
         Share.share(content);
     };
 
+    const handlePostDelete = () => {
+        Alert.alert("Confirm", "Are you sure you want to do this?", [
+            {
+                text: "Cancel",
+                onPress: () => {
+                    console.log("modal canceled");
+                },
+                style: "cancel",
+            },
+            {
+                text: "Yes",
+                onPress: () => onDelete(item?.id),
+                style: "destructive",
+            },
+        ]);
+    };
+
     return (
         <View style={[styles.container, hasShadow && shadowStyles]}>
             <View style={styles.header}>
@@ -145,6 +165,25 @@ const PostCard = ({
                             color={theme.colors.text}
                         />
                     </TouchableOpacity>
+                )}
+
+                {showDelete && currentUser?.id === item?.user?.id && (
+                    <View style={styles.action}>
+                        <TouchableOpacity onPress={() => onEdit(item)}>
+                            <Icon
+                                name="edit"
+                                size={hp(2.5)}
+                                color={theme.colors.text}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handlePostDelete}>
+                            <Icon
+                                name="delete"
+                                size={hp(2.5)}
+                                color={theme.colors.rose}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 )}
             </View>
 
@@ -208,7 +247,9 @@ const PostCard = ({
                         />
                     </TouchableOpacity>
 
-                    <Text style={styles.count}>{item?.comments[0]?.count}</Text>
+                    <Text style={styles.count}>
+                        {item?.comments?.[0]?.count}
+                    </Text>
                 </View>
                 <View style={styles.footerButton}>
                     {loading ? (
@@ -285,5 +326,10 @@ const styles = StyleSheet.create({
     count: {
         color: theme.colors.text,
         fontSize: hp(1.8),
+    },
+    action: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 18,
     },
 });

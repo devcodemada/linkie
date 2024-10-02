@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Alert,
     Pressable,
@@ -14,7 +14,7 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
 
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import Icon from "../../assets/icons";
 import Button from "../../components/Button";
@@ -28,6 +28,19 @@ import { getSupabaseFileUrl } from "../../services/imageService";
 import { createOrUpdatePost } from "../../services/postService";
 
 const newPost = () => {
+    const post = useLocalSearchParams();
+
+    useEffect(() => {
+        if (post && post?.id) {
+            bodyRef.current = post?.body;
+            console.log(post?.file);
+            setFile(post?.file || null);
+            setTimeout(() => {
+                editorRef.current?.setContentHTML(post?.body);
+            }, 300);
+        }
+    }, []);
+
     const { user } = useAuth();
     const bodyRef = useRef("");
     const editorRef = useRef(null);
@@ -57,13 +70,13 @@ const newPost = () => {
 
     const isLocalFile = (file) => {
         if (!file) return null;
-        if (typeof file === "object") return true;
-        return file.uri;
+        if (typeof file == "object") return true;
+        return false;
     };
 
     const getFileType = (file) => {
         if (!file) return null;
-        if (isLocalFile) {
+        if (isLocalFile(file)) {
             return file.type;
         }
 
@@ -74,7 +87,7 @@ const newPost = () => {
 
     const getFileUri = (file) => {
         if (!file) return null;
-        if (isLocalFile) {
+        if (isLocalFile(file)) {
             return file.uri;
         }
 
@@ -93,6 +106,8 @@ const newPost = () => {
             user_id: user?.id,
         };
 
+        if (post && post?.id) data.id = post?.id;
+
         setLoading(true);
         const result = await createOrUpdatePost(data);
         setLoading(false);
@@ -101,7 +116,7 @@ const newPost = () => {
             setFile(null);
             bodyRef.current = "";
             editorRef.current?.setContentHTML("");
-            router.back();
+            router.replace("/home");
         } else {
             Alert.alert("Post", result?.msg);
         }
@@ -186,7 +201,7 @@ const newPost = () => {
                 </ScrollView>
                 <Button
                     buttonStyle={{ height: hp(6.2) }}
-                    title="Post"
+                    title={post && post?.id ? "Update" : "Post"}
                     onPress={onSubmit}
                     loading={loading}
                     hasShadow={false}

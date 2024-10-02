@@ -3,8 +3,8 @@ import { uploadFile } from "./imageService";
 
 export const createOrUpdatePost = async (post) => {
     try {
-        if (post.file && typeof post.file === "object") {
-            let isImage = post?.file?.type === "image";
+        if (post.file && typeof post.file == "object") {
+            let isImage = post?.file?.type == "image";
             let folderName = isImage ? "postImages" : "postVideos";
 
             let fileResult = await uploadFile(
@@ -53,11 +53,10 @@ export const fetchPosts = async (limit = 10) => {
             .from("posts")
             .select(
                 `
-                
-                *, 
-                user: users (id, name, image),
-                post_likes (*),
-                comments (count)
+                    *, 
+                    user: users (id, name, image),
+                    post_likes (*),
+                    comments (count)
                 `
             )
             .order("created_at", { ascending: false })
@@ -149,7 +148,7 @@ export const fetchPostDetails = async (postId) => {
                 *,
                 user: users (id, name, image),
                 post_likes (*),
-                comments (*,user:users(id,name,image))
+                comments (*, user: users(id,name,image))
             `
             )
             .eq("id", postId)
@@ -227,6 +226,33 @@ export const removeComment = async (commentId) => {
         return {
             success: false,
             msg: `Couldn't delete the comment`,
+        };
+    }
+};
+
+export const removePost = async (postId) => {
+    try {
+        const { error } = await supabase
+            .from("posts")
+            .delete()
+            .eq("id", postId);
+
+        if (error) {
+            console.log("Delete post error : ", error);
+            return {
+                success: false,
+                msg: `Couldn't delete the post`,
+            };
+        }
+
+        return {
+            success: true,
+        };
+    } catch (error) {
+        console.log("Delete post error : ", error);
+        return {
+            success: false,
+            msg: `Couldn't delete the post`,
         };
     }
 };
