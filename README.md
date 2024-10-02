@@ -1,50 +1,79 @@
-# Welcome to your Expo app 👋
+# Linkie
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Linkie is a social media app built using React Native and Supabase, providing a seamless experience for posting, liking, commenting, and sharing. The app features real-time updates and supports photo and video uploads.
 
-## Get started
+## Features
 
-1. Install dependencies
+-   **Post, Like, Comment, Share**: Users can create posts, like, comment, and share content.
+-   **Real-time Updates**: Leveraging Supabase subscriptions, updates are reflected instantly for all users.
+-   **Media Uploads**: Users can upload photos and videos, stored securely with Supabase Storage.
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+-   **Frontend**: React Native
+-   **Backend**: Supabase (Database, Storage, Realtime)
 
-   ```bash
-    npx expo start
-   ```
+## Screenshots
 
-In the output, you'll find options to open the app in a
+![Home Screen](dummy-image-home.png)
+_Home Screen_
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+![Post Creation](dummy-image-post.png)
+_Create a Post_
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+![Comments Section](dummy-image-comments.png)
+_Comments Section_
 
-## Get a fresh project
+## Installation
 
-When you're ready, run:
+1. Clone the repository:
 
-```bash
-npm run reset-project
+    ```sh
+    git clone https://github.com/devcodemada/linkie.git
+    cd linkie
+    ```
+
+2. Install dependencies:
+
+    ```
+    npm install
+    ```
+
+3. Set up Supabase:
+
+    - Create a Supabase project and get the API keys.
+    - Add your Supabase URL and API key in a .env file.
+
+4. Run the app:
+    ```
+    npm run android  # For Android
+    npm run ios      # For iOS
+    ```
+
+## Configuration
+
+Create a .env file in the root of the project with your Supabase credentials:
+
+```
+SUPABASE_URL=your-supabase-url
+SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Usage
 
-## Learn more
+-   **Register**: Create an account using an email and password.
+-   **Post Content**: Upload photos/videos, write captions, and share with others.
+-   **Like, Comment, Share**: Interact with posts in real-time.
+-   **View Real-Time Updates**: Receive updates instantly when others like, comment, or share.
 
-To learn more about developing your project with Expo, look at the following resources:
+## License
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Join the community
+## Contributing
 
-Join our community of developers creating universal apps.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Contact
+
+For any questions, feel free to reach out at [devcodemada@gmail.com].
