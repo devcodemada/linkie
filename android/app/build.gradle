@@ -117,6 +117,14 @@ android {
         versionCode 1
         versionName "1.0.0"
     }
+    splits {
+        abi {
+            reset()
+            enable true
+            universalApk false
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -126,11 +134,12 @@ android {
         }
         release {
             storeFile file('linkie.keystore')
-            storePassword System.getenv('KEYSTORE_PASSWORD') ?: ''
-            keyAlias System.getenv('KEY_ALIAS') ?: ''
-            keyPassword System.getenv('KEY_PASSWORD') ?: ''
+            storePassword (findProperty('KEYSTORE_PASSWORD') ?: '')
+            keyAlias (findProperty('KEY_ALIAS') ?: '')
+            keyPassword (findProperty('KEY_PASSWORD') ?: '')
         }
     }
+    
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -194,6 +203,7 @@ dependencies {
         }
     }
 
+    def enableHermes = true
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

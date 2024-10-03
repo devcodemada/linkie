@@ -11,6 +11,8 @@ npm-debug.*
 web-build/
 android/gradle.properties
 
+android/
+
 # macOS
 .DS_Store
 
