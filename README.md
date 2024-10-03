@@ -19,13 +19,15 @@ Thanks to _code with nomi_
 
 ## Screenshots
 
-| Get Started                                   | Register                                | Home                            |
-| --------------------------------------------- | --------------------------------------- | ------------------------------- |
-| ![Get Started](./screenshots/get-started.jpg) | ![Register](./screenshots/register.jpg) | ![Home](./screenshots/home.jpg) |
+## Screenshots
 
-| Notification                                    | Comment                               | Profile                               |
-| ----------------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Notification](./screenshots/notification.jpg) | ![Comment](./screenshots/comment.jpg) | ![Profile](./screenshots/profile.jpg) |
+| Get Started                                            | Register                                            | Home                                            |
+| ------------------------------------------------------ | --------------------------------------------------- | ----------------------------------------------- |
+| <img src="./screenshots/get-started.jpg" height="200"> | <img src="./screenshots/register.jpg" height="200"> | <img src="./screenshots/home.jpg" height="200"> |
+
+| Notification                                            | Comment                                            | Profile                                            |
+| ------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
+| <img src="./screenshots/notification.jpg" height="200"> | <img src="./screenshots/comment.jpg" height="200"> | <img src="./screenshots/profile.jpg" height="200"> |
 
 ## Installation
 
