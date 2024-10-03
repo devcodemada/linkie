@@ -2,6 +2,8 @@
 
 Linkie is a social media app built using React Native and Supabase, providing a seamless experience for posting, liking, commenting, and sharing. The app features real-time updates and supports photo and video uploads.
 
+Thanks to _code with nomi_
+
 ## Features
 
 -   **Post, Like, Comment, Share**: Users can create posts, like, comment, and share content.
@@ -15,14 +17,26 @@ Linkie is a social media app built using React Native and Supabase, providing a 
 
 ## Screenshots
 
-![Home Screen](dummy-image-home.png)
-_Home Screen_
-
-![Post Creation](dummy-image-post.png)
-_Create a Post_
-
-![Comments Section](dummy-image-comments.png)
-_Comments Section_
+<div style="display: flex; flex-direction: row; flex: wrap; gap: 6px">
+    <div>
+        <img src="./screenshots/get-started.jpg" width="200" style='display: block'>
+    </div>
+    <div>
+        <img src="./screenshots/register.jpg" width="200" style='display: block'>
+    </div>
+    <div>
+        <img src="./screenshots/home.jpg" width="200" style='display: block'>
+    </div>
+    <div>
+        <img src="./screenshots/notification.jpg" width="200" style='display: block'>
+    </div>
+    <div>
+        <img src="./screenshots/comment.jpg" width="200" style='display: block'>
+    </div>
+    <div>
+        <img src="./screenshots/profile.jpg" width="200" style='display: block'>
+    </div>
+</div>
 
 ## Installation
 
