@@ -17,26 +17,15 @@ Thanks to _code with nomi_
 
 ## Screenshots
 
-<div style="display: flex; flex-direction: row; flex: wrap; gap: 6px">
-    <div>
-        <img src="./screenshots/get-started.jpg" width="200">
-    </div>
-    <div>
-        <img src="./screenshots/register.jpg" width="200">
-    </div>
-    <div>
-        <img src="./screenshots/home.jpg" width="200">
-    </div>
-    <div>
-        <img src="./screenshots/notification.jpg" width="200">
-    </div>
-    <div>
-        <img src="./screenshots/comment.jpg" width="200">
-    </div>
-    <div>
-        <img src="./screenshots/profile.jpg" width="200">
-    </div>
-</div>
+## Screenshots
+
+| Get Started                                   | Register                                | Home                            |
+| --------------------------------------------- | --------------------------------------- | ------------------------------- |
+| ![Get Started](./screenshots/get-started.jpg) | ![Register](./screenshots/register.jpg) | ![Home](./screenshots/home.jpg) |
+
+| Notification                                    | Comment                               | Profile                               |
+| ----------------------------------------------- | ------------------------------------- | ------------------------------------- |
+| ![Notification](./screenshots/notification.jpg) | ![Comment](./screenshots/comment.jpg) | ![Profile](./screenshots/profile.jpg) |
 
 ## Installation
 
