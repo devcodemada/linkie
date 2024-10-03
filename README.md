@@ -19,22 +19,22 @@ Thanks to _code with nomi_
 
 <div style="display: flex; flex-direction: row; flex: wrap; gap: 6px">
     <div>
-        <img src="./screenshots/get-started.jpg" width="200" style='display: block'>
+        <img src="./screenshots/get-started.jpg" width="200">
     </div>
     <div>
-        <img src="./screenshots/register.jpg" width="200" style='display: block'>
+        <img src="./screenshots/register.jpg" width="200">
     </div>
     <div>
-        <img src="./screenshots/home.jpg" width="200" style='display: block'>
+        <img src="./screenshots/home.jpg" width="200">
     </div>
     <div>
-        <img src="./screenshots/notification.jpg" width="200" style='display: block'>
+        <img src="./screenshots/notification.jpg" width="200">
     </div>
     <div>
-        <img src="./screenshots/comment.jpg" width="200" style='display: block'>
+        <img src="./screenshots/comment.jpg" width="200">
     </div>
     <div>
-        <img src="./screenshots/profile.jpg" width="200" style='display: block'>
+        <img src="./screenshots/profile.jpg" width="200">
     </div>
 </div>
 
