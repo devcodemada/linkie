@@ -17,10 +17,6 @@ Thanks to _code with nomi_
 
 ## Screenshots
 
-## Screenshots
-
-## Screenshots
-
 | Get Started                                            | Register                                            | Home                                            |
 | ------------------------------------------------------ | --------------------------------------------------- | ----------------------------------------------- |
 | <img src="./screenshots/get-started.jpg" height="200"> | <img src="./screenshots/register.jpg" height="200"> | <img src="./screenshots/home.jpg" height="200"> |
